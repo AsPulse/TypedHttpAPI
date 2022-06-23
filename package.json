@@ -1,5 +1,5 @@
 {
-  "name": "typed-http",
+  "name": "typed-http-api",
   "version": "1.0.0",
   "main": "./lib/index.js",
   "module": "./lib/index.esm.js",
