@@ -1,7 +1,12 @@
 {
   "name": "typed-http",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "module": "./lib/index.esm.js",
+  "types": "./lib/index.d.ts",
+  "files": [
+    "./lib"
+  ],
   "description": "TypeScript type system compliant communication via HTTP.",
   "keywords": [
     "http",
@@ -16,7 +21,9 @@
   "author": "aspulse <aspulse.x@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^18.0.0",
     "esbuild": "^0.14.47",
+    "esbuild-plugin-d.ts": "^1.1.0",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.4"
   }
