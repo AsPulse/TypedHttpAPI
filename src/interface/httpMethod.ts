@@ -1,2 +1,10 @@
+export const HTTP_REQUEST_METHODS = [
+  'GET',
+  'POST',
+  'PUT',
+  'DELETE',
+  'PATCH',
+] as const;
+
 export type HttpRequestMethod
-  = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  = (typeof HTTP_REQUEST_METHODS)[number];
