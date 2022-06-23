@@ -1,0 +1,39 @@
+{
+  "name": "typed-http",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "module": "./lib/index.esm.js",
+  "types": "./lib/index.d.ts",
+  "files": [
+    "./lib"
+  ],
+  "description": "TypeScript type system compliant communication via HTTP.",
+  "keywords": [
+    "http",
+    "json",
+    "ajax",
+    "xmlhttprequest",
+    "io-ts",
+    "type",
+    "api"
+  ],
+  "repository": "https://github.com/AsPulse/TypedHTTP.git",
+  "author": "aspulse <aspulse.x@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
+    "@typescript-eslint/parser": "^5.29.0",
+    "esbuild": "^0.14.47",
+    "esbuild-plugin-d.ts": "^1.1.0",
+    "eslint": "^8.18.0",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {},
+  "scripts": {
+    "lint": "eslint src/**/*.ts --fix",
+    "build": "ts-node build.ts",
+    "prepublishOnly": "build"
+  }
+}
