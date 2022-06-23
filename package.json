@@ -14,5 +14,10 @@
   ],
   "repository": "https://github.com/AsPulse/TypedHTTP.git",
   "author": "aspulse <aspulse.x@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "^0.14.47",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4"
+  }
 }
