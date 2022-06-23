@@ -1,0 +1,18 @@
+{
+  "name": "typed-http",
+  "version": "1.0.0",
+  "main": "index.js",
+  "description": "TypeScript type system compliant communication via HTTP.",
+  "keywords": [
+    "http",
+    "json",
+    "ajax",
+    "xmlhttprequest",
+    "io-ts",
+    "type",
+    "api"
+  ],
+  "repository": "https://github.com/AsPulse/TypedHTTP.git",
+  "author": "aspulse <aspulse.x@gmail.com>",
+  "license": "MIT"
+}
