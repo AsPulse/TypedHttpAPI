@@ -32,6 +32,8 @@
   },
   "dependencies": {},
   "scripts": {
-    "lint": "eslint src/**/*.ts --fix"
+    "lint": "eslint src/**/*.ts --fix",
+    "build": "ts-node build.ts",
+    "prepublishOnly": "build"
   }
 }
