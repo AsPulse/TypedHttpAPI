@@ -21,7 +21,7 @@ export type APISchema = {
   }
 };
 
-export type RemoveNoIOMethod<T extends APISchema[string]> 
+export type RemoveNoIOMethod<T extends APISchema[keyof APISchema]> 
   = { [P in keyof T as T[P] extends APISchemaIO ? P : never]: T[P] }
 
 
