@@ -12,9 +12,8 @@ export type HttpRequest<Raw> = {
 }
 
 /** Request sent by TypedHTTPAPI to a user-implemented API. */
-export class HttpAPIRequest<Input,Raw> {
+export class HttpAPIRequest<Raw> {
   constructor(
-    public input: Input,
     private received: HttpRequest<Raw>,
   ) {}
 
