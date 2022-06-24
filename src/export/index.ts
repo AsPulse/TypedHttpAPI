@@ -1,6 +1,5 @@
 import type { APIExport } from '..';
 
-export class APIExports<Raw> {
+export class TypedAPIExports<Raw> {
   constructor(public apis: APIExport<Raw>[]){}
-  
 }

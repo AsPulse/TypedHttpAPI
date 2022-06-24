@@ -1,4 +1,4 @@
-import { APIExports } from './export';
+import { TypedAPIExports } from './export';
 import type { HttpRequest, HttpResponse } from './interface/httpInterface';
 import { HttpAPIRequest, HttpAPIResponse } from './interface/httpInterface';
 import type { HttpRequestMethod } from './interface/httpMethod';
@@ -46,8 +46,8 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
     return this;
   }
 
-  export(): APIExports<Raw> {
-    return new APIExports(this.implementations.map(v => ({
+  export(): TypedAPIExports<Raw> {
+    return new TypedAPIExports(this.implementations.map(v => ({
       uri: v.uri,
       method: v.method,
       async processor(request) {
