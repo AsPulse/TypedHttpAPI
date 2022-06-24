@@ -12,7 +12,7 @@ export type APISchemaIO = {
 
 };
 
-export type APIEndPoint =`${HttpRequestMethod} ${string}`;
+export type APIEndPoint =`${HttpRequestMethod} /${string}`;
 
 /**
  * For each API endpoint, specify the request method, request interface and response interfaces.
