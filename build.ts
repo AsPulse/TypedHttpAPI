@@ -19,12 +19,6 @@ const buildOptions = {
 
 build({
   ...buildOptions,
-  format: 'esm',
-  outfile: './lib/index.esm.js',
-});
-
-build({
-  ...buildOptions,
   format: 'cjs',
   outdir: './lib',
   plugins: [dtsPlugin()]
