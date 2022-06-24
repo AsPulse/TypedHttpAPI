@@ -47,11 +47,13 @@ export class HttpAPIResponse<OutputType> {
   
   code(code: number) {
     this._code = code;
+    return this;
   }
 
   data(data: OutputType) {
     this._data = data;
     if(this._code === null) this._code = 200;
+    return this;
   }
 
   static unpack<T>(response: HttpAPIResponse<T>): HttpResponse {
