@@ -29,7 +29,7 @@ type FailedResponse<Payload> = {
 } | { reason: 'timeout' | 'error' | 'json' };
 
 type Judger<Payload> = (response: Response<Payload>) => boolean;
-export class TypedHttpAPIRequest<RequestPayload extends Record<string, unknown>, ResponsePayload> {
+class TypedHttpAPIRequest<RequestPayload extends Record<string, unknown>, ResponsePayload> {
   xhr = new XMLHttpRequest();
   private _judge: Judger<ResponsePayload> = response => 200 <= response.code && response.code < 300 || response.code === 304;
   private _timeout = 10000;
