@@ -1,3 +1,4 @@
+import { APIExports } from './export';
 import type { HttpRequest, HttpResponse } from './interface/httpInterface';
 import { HttpAPIRequest, HttpAPIResponse } from './interface/httpInterface';
 import type { HttpRequestMethod } from './interface/httpMethod';
@@ -23,11 +24,12 @@ type APIImplements<
   processor: APIImplement<APISchemaType, Raw, keyof APISchemaType & APIEndPoint>['processor']
 };
 
-type APIExport<Raw> = {
+export type APIExport<Raw> = {
   uri: string,
   method: HttpRequestMethod,
   processor: (request: HttpRequest<Raw>) => Promise<HttpResponse>
 }
+
 
 export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined> {
   implementations: APIImplements<APISchemaType, Raw>[] = [];
@@ -44,8 +46,8 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
     return this;
   }
 
-  export(): APIExport<Raw>[] {
-    return this.implementations.map(v => ({
+  export(): APIExports<Raw> {
+    return new APIExports(this.implementations.map(v => ({
       uri: v.uri,
       method: v.method,
       async processor(request) {
@@ -53,6 +55,6 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
         if(!v.io.request.is(payload)) return { code: 400, data: '400 Bad Request The payload type is incorrect.' };
         return HttpAPIResponse.unpack(await v.processor(payload, new HttpAPIRequest(request)));
       },
-    }));
+    })));
   }
 }
