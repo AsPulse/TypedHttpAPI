@@ -11,6 +11,11 @@ export type HttpRequest<Raw> = {
   raw: Raw,
 }
 
+export type HttpResponse = {
+  code: number,
+  data: unknown
+};
+
 /** Request sent by TypedHTTPAPI to a user-implemented API. */
 export class HttpAPIRequest<Raw> {
   constructor(
@@ -34,5 +39,26 @@ export class HttpAPIRequest<Raw> {
     return this.received.remoteAddress;
   }
 
+}
+
+export class HttpAPIResponse<OutputType> {
+  private _code: number| null = null;
+  private _data: OutputType | null = null;
+  
+  code(code: number) {
+    this._code = code;
+  }
+
+  data(data: OutputType) {
+    this._data = data;
+    if(this._code === null) this._code = 200;
+  }
+
+  static unpack<T>(response: HttpAPIResponse<T>): HttpResponse {
+    return {
+      code: response._code ?? 501,
+      data: response._data ?? {},
+    };
+  }
 }
 
