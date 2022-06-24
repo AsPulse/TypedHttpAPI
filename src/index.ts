@@ -40,3 +40,5 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
     return new TypedAPIExports(types);
   }
 }
+
+export * from './export/index';
