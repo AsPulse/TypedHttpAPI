@@ -17,10 +17,12 @@ export type HttpResponse = {
 };
 
 /** Request sent by TypedHTTPAPI to a user-implemented API. */
-export class HttpAPIRequest<Raw> {
+export class HttpAPIRequest<Raw, ResponseType> {
   constructor(
     private received: HttpRequest<Raw>,
   ) {}
+
+  response = new HttpAPIResponse<ResponseType>;
 
   raw() { return this.received.raw; }
 

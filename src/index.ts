@@ -15,7 +15,7 @@ type APIImplement<
   EndPoint extends (keyof APISchemaType & APIEndPoint) = keyof APISchemaType & APIEndPoint,
 > = {
   endpoint: EndPoint,
-  processor: (input: TypeOf<APISchemaType[EndPoint]['request']>, req: HttpAPIRequest<Raw>, res: HttpAPIResponse<TypeOf<APISchemaType[EndPoint]['response']>>) => Promise<HttpAPIResponse<TypeOf<APISchemaType[EndPoint]['response']>>>,
+  processor: (request: HttpAPIRequest<Raw, TypeOf<APISchemaType[EndPoint]['response']>>, body: TypeOf<APISchemaType[EndPoint]['request']>) => Promise<HttpAPIResponse<TypeOf<APISchemaType[EndPoint]['response']>>>,
 };
 
 type APIImplements<
@@ -57,7 +57,7 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
       async processor(request) {
         const payload = request.body;
         if(!v.io.request.is(payload)) return { code: 400, data: '400 Bad Request The payload type is incorrect.' };
-        return HttpAPIResponse.unpack(await v.processor(payload, new HttpAPIRequest(request), new HttpAPIResponse()));
+        return HttpAPIResponse.unpack(await v.processor(new HttpAPIRequest(request), payload));
       },
     }));
     if(summary) generateSummary({
