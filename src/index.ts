@@ -1,39 +1,11 @@
-import type { TypeOf } from 'io-ts';
 import { TypedAPIExports } from './export';
-import type { HttpRequest, HttpResponse } from './interface/httpInterface';
+import type { APIImplements, APIImplement, APIExport } from './interface/api';
 import { HttpAPIRequest, HttpAPIResponse } from './interface/httpInterface';
-import type { HttpRequestMethod} from './interface/httpMethod';
 import { HTTP_REQUEST_METHODS } from './interface/httpMethod';
-import type { APISchema, APIEndPoint, APISchemaIO } from './interface/schema';
+import type { APISchema, APIEndPoint } from './interface/schema';
 import { detectDuplicate } from './util/detectDuplicate';
 import { generateSummary } from './util/formatSummary';
 import { parseEndPoint } from './util/parseEndPoint';
-
-type APIImplement<
-  APISchemaType extends APISchema,
-  Raw,
-  EndPoint extends (keyof APISchemaType & APIEndPoint) = keyof APISchemaType & APIEndPoint,
-> = {
-  endpoint: EndPoint,
-  processor: (request: HttpAPIRequest<Raw, TypeOf<APISchemaType[EndPoint]['response']>>, body: TypeOf<APISchemaType[EndPoint]['request']>) => Promise<HttpAPIResponse<TypeOf<APISchemaType[EndPoint]['response']>>>,
-};
-
-type APIImplements<
-  APISchemaType extends APISchema,
-  Raw,
-> = {
-  io: APISchemaIO,
-  uri: string,
-  method: HttpRequestMethod,
-  processor: APIImplement<APISchemaType, Raw, keyof APISchemaType & APIEndPoint>['processor']
-};
-
-export type APIExport<Raw> = {
-  uri: string,
-  method: HttpRequestMethod,
-  processor: (request: HttpRequest<Raw>) => Promise<HttpResponse>
-}
-
 
 export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined> {
   implementations: APIImplements<APISchemaType, Raw>[] = [];
