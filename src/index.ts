@@ -8,7 +8,7 @@ import { generateSummary } from './util/formatSummary';
 import { parseEndPoint } from './util/parseEndPoint';
 
 export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined> {
-  implementations: APIImplements<APISchemaType, Raw>[] = [];
+  private implementations: APIImplements<APISchemaType, Raw>[] = [];
   constructor(public schema: APISchemaType){}
 
   implement<
