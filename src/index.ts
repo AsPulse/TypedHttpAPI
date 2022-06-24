@@ -42,3 +42,4 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
 }
 
 export * from './export/index';
+export { generateAPISchema } from './interface/schema';
