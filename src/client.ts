@@ -30,7 +30,7 @@ type FailedResponse<Payload> = {
 
 type Judger<Payload> = (response: Response<Payload>) => boolean;
 class TypedHttpAPIRequest<RequestPayload extends Record<string, unknown>, ResponsePayload> {
-  xhr = new XMLHttpRequest();
+  private xhr = new XMLHttpRequest();
   private _judge: Judger<ResponsePayload> = response => 200 <= response.code && response.code < 300 || response.code === 304;
   private _timeout = 10000;
 
