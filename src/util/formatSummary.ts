@@ -22,7 +22,7 @@ export function generateSummary(data: TypedAPIExportSummary) {
     `${bold}${magenta}=== TypedAPI Export Summary ===${reset}`,
     '',
     '- API Schema Counts:',
-    ...keyValue(data.apiCount.flatMap(v => v.count > 0 ? [({ key: v.method, value: `${v.count} API(s)` })] : [])).map(v => `   ${v}`),
+    ...keyValue(data.apiCount.flatMap(v => v.count > 0 ? [({ key: v.method, value: `${v.count} API(s)` })] : []), ['(No API implemented)']).map(v => `   ${v}`),
     '',
     ...(data.doublingEndpoints.length > 0 ? [
       `${yellow}${bold}- WARNING ${reset}${yellow}There are multiple implementations of the API below:${reset}`,
@@ -45,7 +45,8 @@ export function generateSummary(data: TypedAPIExportSummary) {
   ];
 }
 
-function keyValue(data: { key: string, value: string }[]): string[] {
+function keyValue(data: { key: string, value: string }[], noValue: string[]): string[] {
+  if(data.length === 0) return noValue;
   const keyLen = data.map(v => v.key.length).reduce((a, b) => Math.max(a, b)) + 1;
   return data.map(v => 
     `${v.key}${' '.repeat(keyLen - v.key.length)}${v.value}`,
