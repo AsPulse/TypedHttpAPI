@@ -50,7 +50,7 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
     return this;
   }
 
-  export(): TypedAPIExports<Raw> {
+  export(summary = true): TypedAPIExports<Raw> {
     const types: APIExport<Raw>[] = this.implementations.map(v => ({
       uri: v.uri,
       method: v.method,
@@ -60,7 +60,7 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
         return HttpAPIResponse.unpack(await v.processor(payload, new HttpAPIRequest(request), new HttpAPIResponse()));
       },
     }));
-    generateSummary({
+    if(summary) generateSummary({
       apiCount: HTTP_REQUEST_METHODS.map(v => ({ method: v, count: types.filter(e => e.method === v).length })),
       doublingEndpoints: detectDuplicate(types.map(v => `${v.method} ${v.uri}`)),
       shortageEndpoints: Object.entries(this.schema).map(v => v[0]).filter(v => types.find(e => `${e.method} ${e.uri}` === v) === undefined),
