@@ -7,7 +7,7 @@ rm('./lib', { recursive: true });
 
 const buildOptions = {
   bundle: true,
-  entryPoints: ['./src/index.ts'],
+  entryPoints: ['./src/index.ts', './src/client.ts'],
   external: [
     ...Object.keys(dependencies ?? []),
     ...Object.keys(devDependencies ?? []),
