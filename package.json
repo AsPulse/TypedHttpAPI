@@ -4,7 +4,8 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "files": [
-    "./lib"
+    "./lib/lib-server",
+    "./lib/lib-client"
   ],
   "description": "TypeScript type system compliant communication via HTTP.",
   "keywords": [

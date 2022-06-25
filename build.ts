@@ -20,7 +20,7 @@ build({
   ...buildOptions,
   entryPoints: ['./src/index.ts'],
   format: 'cjs',
-  outdir: './lib/server',
+  outdir: './lib/lib-server',
   plugins: [dtsPlugin()]
 });
 
@@ -28,6 +28,6 @@ build({
   ...buildOptions,
   entryPoints: ['./src/client.ts'],
   format: 'cjs',
-  outdir: './lib/client',
+  outdir: './lib/lib-client',
   plugins: [dtsPlugin()]
 });
