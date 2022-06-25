@@ -1,11 +1,10 @@
 {
   "name": "typed-http-api",
   "version": "1.0.0-nightly.5",
-  "main": "./lib/server/index.js",
-  "types": "./lib/server/index.d.ts",
+  "main": "./lib/server.js",
+  "types": "./lib/server.d.ts",
   "files": [
-    "./lib/server",
-    "./lib/client"
+    "./lib"
   ],
   "description": "TypeScript type system compliant communication via HTTP.",
   "keywords": [
@@ -21,7 +20,6 @@
   "author": "aspulse <aspulse.x@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@types/dts-bundle": "^0.0.32",
     "@types/node": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@typescript-eslint/parser": "^5.29.0",
