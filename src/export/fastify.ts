@@ -1,22 +1,21 @@
 import type { TypedAPIExports } from '.';
 
-import type { FastifyInstance, FastifyRequest } from 'fastify';
+import type { FastifyInstance, FastifyRequest, RouteHandlerMethod } from 'fastify';
 import type { HttpRequestMethod } from '../interface/httpMethod';
 
 export class TypedAPIFastify {
   constructor(public exports: TypedAPIExports<FastifyRequest>){}
 
   register(fastify: FastifyInstance) {
+    const route = ((v: HttpRequestMethod, path: string, handler: RouteHandlerMethod) => {
+      if(v === 'POST') return fastify.post(path, handler);
+      if(v === 'PUT') return fastify.put(path, handler);
+      if(v === 'DELETE') return fastify.delete(path, handler);
+      if(v === 'PATCH') return fastify.patch(path, handler);
+      return fastify.get(path, handler);
+    });
     this.exports.apis.forEach(api => {
-      const route = ((v: HttpRequestMethod) => {
-        if(v === 'POST') return fastify.post;
-        if(v === 'PUT') return fastify.put;
-        if(v === 'DELETE') return fastify.delete;
-        if(v === 'PATCH') return fastify.patch;
-        return fastify.get;
-      })(api.method);
-
-      route(api.uri, async (request, reply) => {
+      route(api.method, api.uri, async (request, reply) => {
         const implement = await api.processor({
           header: request.headers,
           remoteAddress: request.ip,
