@@ -8,6 +8,7 @@ export class TypedHttpAPI<APISchemaType extends APISchema> {
 
   customServerAddress(address: string) {
     this.uriPrefix = address;
+    return this;
   }
 
   open<T extends keyof APISchemaType & APIEndPoint>(endpoint: T, data: TypeOf<APISchemaType[T]['request']>) {
