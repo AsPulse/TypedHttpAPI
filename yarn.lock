@@ -118,11 +118,6 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.3.tgz#472eaab5f15c1ffdd7f8628bd4c4f753995ec79e"
   integrity sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==
 
-"@types/dts-bundle@^0.0.32":
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/@types/dts-bundle/-/dts-bundle-0.0.32.tgz#6898717aa8e28f44da572c16d84ae1fc7a377c99"
-  integrity sha512-PjcbbB90SuJFaApDSubnqiG4H0WnFD2buOGIdv8QNzGwPG41HT3mT6gOx2QXUogwBW/2QWGGhuF379lnmYTsFA==
-
 "@types/json-schema@^7.0.9":
   version "7.0.11"
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.11.tgz#d421b6c527a3037f7c84433fd2c4229e016863d3"

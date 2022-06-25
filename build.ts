@@ -1,12 +1,10 @@
 import { build } from 'esbuild';
-import { rm } from 'fs/promises';
+import { rm, writeFile } from 'fs/promises';
 import { generateDtsBundle } from 'dts-bundle-generator';
-import { writeFile } from 'fs/promises';
 import { resolve } from 'path';
 
 const { dependencies, devDependencies, peerDependencies } = require('./package.json');
 
-rm('./lib', { recursive: true });
 
 const buildOptions = {
   bundle: true,
@@ -20,40 +18,35 @@ const buildOptions = {
 };
 (async () => {
 
-  const server = build({
+  await rm('./lib', { recursive: true, force: true });
+
+  await build({
     ...buildOptions,
-    entryPoints: ['./src/server/index.ts'],
+    entryPoints: ['./src/entry/server.ts', './src/entry/client.ts'],
     format: 'cjs',
-    outdir: './lib/server',
+    outdir: './lib',
   });
 
-  const client = build({
-    ...buildOptions,
-    entryPoints: ['./src/client/index.ts'],
-    format: 'cjs',
-    outdir: './lib/client',
-  });
-
-  await Promise.all([ server, client ]);
 
   const serverDts = generateDtsBundle([
     {
-      filePath: './src/server/index.ts',
-      output: {
-        exportReferencedTypes: false
-      }
-    },
-  ]);
-  const clientDts = generateDtsBundle([
-    {
-      filePath: './src/client/index.ts',
+      filePath: './src/entry/server.ts',
       output: {
         exportReferencedTypes: false
       }
     },
   ]);
 
-  await writeFile(resolve('./lib/server/index.d.ts'), serverDts);
-  await writeFile(resolve('./lib/client/index.d.ts'), clientDts);
+  const clientDts = generateDtsBundle([
+    {
+      filePath: './src/entry/client.ts',
+      output: {
+        exportReferencedTypes: false
+      }
+    },
+  ]);
+
+  await writeFile(resolve('./lib/server.d.ts'), serverDts);
+  await writeFile(resolve('./lib/client.d.ts'), clientDts);
 
 })();
