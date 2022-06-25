@@ -1,7 +1,7 @@
 import type { TypeOf } from 'io-ts';
-import type { HttpRequestMethod } from './interface/httpMethod';
-import type { APIEndPoint, APISchema } from './interface/schema';
-import { parseEndPoint } from './util/parseEndPoint';
+import type { HttpRequestMethod } from '../interface/httpMethod';
+import type { APIEndPoint, APISchema } from '../interface/schema';
+import { parseEndPoint } from '../util/parseEndPoint';
 
 export class TypedHttpAPI<APISchemaType extends APISchema> {
   private uriPrefix = '';

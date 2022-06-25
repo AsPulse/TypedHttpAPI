@@ -1,11 +1,11 @@
-import { TypedAPIExports } from './export';
-import type { APIImplements, APIImplement, APIExport } from './interface/api';
-import { HttpAPIRequest, HttpAPIResponse } from './interface/httpInterface';
-import { HTTP_REQUEST_METHODS } from './interface/httpMethod';
-import type { APISchema, APIEndPoint } from './interface/schema';
-import { detectDuplicate } from './util/detectDuplicate';
-import { generateSummary } from './util/formatSummary';
-import { parseEndPoint } from './util/parseEndPoint';
+import { TypedAPIExports } from '../export';
+import type { APIImplements, APIImplement, APIExport } from '../interface/api';
+import { HttpAPIRequest, HttpAPIResponse } from '../interface/httpInterface';
+import { HTTP_REQUEST_METHODS } from '../interface/httpMethod';
+import type { APISchema, APIEndPoint } from '../interface/schema';
+import { detectDuplicate } from '../util/detectDuplicate';
+import { generateSummary } from '../util/formatSummary';
+import { parseEndPoint } from '../util/parseEndPoint';
 
 export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined> {
   private implementations: APIImplements<APISchemaType, Raw>[] = [];
@@ -41,5 +41,5 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
   }
 }
 
-export * from './export/index';
-export { generateAPISchema } from './interface/schema';
+export { TypedAPIExports, TypedAPIFastify } from '../export/index';
+export { generateAPISchema } from '../interface/schema';
