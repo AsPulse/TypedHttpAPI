@@ -1,4 +1,4 @@
-import type { TypeOf } from 'io-ts';
+import type { Static } from 'runtypes/lib/runtype';
 import type { HttpRequestMethod } from '../interface/httpMethod';
 import type { APIEndPoint, APISchema } from '../interface/schema';
 import { parseEndPoint } from '../util/parseEndPoint';
@@ -11,11 +11,11 @@ export class TypedHttpAPI<APISchemaType extends APISchema> {
     return this;
   }
 
-  open<T extends keyof APISchemaType & APIEndPoint>(endpoint: T, data: TypeOf<APISchemaType[T]['request']>) {
+  open<T extends keyof APISchemaType & APIEndPoint>(endpoint: T, data: Static<APISchemaType[T]['request']>) {
     const target = parseEndPoint(endpoint);
     return new TypedHttpAPIRequest<
-      TypeOf<APISchemaType[T]['request']>,
-      TypeOf<APISchemaType[T]['response']>
+      Static<APISchemaType[T]['request']>,
+      Static<APISchemaType[T]['response']>
     >(target.method, this.uriPrefix + target.uri, data);
   }
 }

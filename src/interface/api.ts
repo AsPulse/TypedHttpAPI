@@ -1,7 +1,7 @@
-import type { TypeOf } from 'io-ts';
+import type { Static } from 'runtypes';
 import type { HttpAPIRequest, HttpAPIResponse, HttpRequest, HttpResponse } from './httpInterface';
 import type { HttpRequestMethod } from './httpMethod';
-import type { APISchema, APIEndPoint, APISchemaIO } from './schema';
+import type { APISchema, APIEndPoint, AnyAPISchemaIO } from './schema';
 
 export type APIImplement<
   APISchemaType extends APISchema,
@@ -9,17 +9,17 @@ export type APIImplement<
   EndPoint extends (keyof APISchemaType & APIEndPoint) = keyof APISchemaType & APIEndPoint,
 > = {
   endpoint: EndPoint,
-  processor: (request: HttpAPIRequest<Raw, TypeOf<APISchemaType[EndPoint]['response']>>, body: TypeOf<APISchemaType[EndPoint]['request']>) => Promise<HttpAPIResponse<TypeOf<APISchemaType[EndPoint]['response']>>>,
+  processor: (request: HttpAPIRequest<Raw, Static<APISchemaType[EndPoint]['response']>>, body: Static<APISchemaType[EndPoint]['request']>) => Promise<HttpAPIResponse<Static<APISchemaType[EndPoint]['response']>>>,
 };
 
 export type APIImplements<
   APISchemaType extends APISchema,
   Raw,
 > = {
-  io: APISchemaIO,
+  io: AnyAPISchemaIO,
   uri: string,
   method: HttpRequestMethod,
-  processor: APIImplement<APISchemaType, Raw, keyof APISchemaType & APIEndPoint>['processor']
+  processor: APIImplement<APISchemaType, Raw, keyof APISchemaType & APIEndPoint>['processor'],
 };
 
 export type APIExport<Raw> = {
