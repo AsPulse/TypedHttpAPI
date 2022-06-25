@@ -2,9 +2,21 @@ import type { TypedAPIExports } from '.';
 
 import type { FastifyInstance, FastifyRequest, RouteHandlerMethod } from 'fastify';
 import type { HttpRequestMethod } from '../interface/httpMethod';
+import type { APIImplementOption } from '../interface/api';
 
 export class TypedAPIFastify {
   constructor(public exports: TypedAPIExports<FastifyRequest>){}
+
+  private static option: APIImplementOption = {
+    incorrectTypeMessage: {
+      code: 400, 
+      data: {
+        message: 'The payload type is different from schema.',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  };
 
   register(fastify: FastifyInstance) {
     const route = ((v: HttpRequestMethod, path: string, handler: RouteHandlerMethod) => {
@@ -16,7 +28,7 @@ export class TypedAPIFastify {
     });
     this.exports.apis.forEach(api => {
       route(api.method, api.uri, async (request, reply) => {
-        const implement = await api.processor({
+        const implement = await api.processor(TypedAPIFastify.option)({
           header: request.headers,
           remoteAddress: request.ip,
           body: request.body,

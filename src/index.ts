@@ -26,9 +26,9 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
     const types: APIExport<Raw>[] = this.implementations.map(v => ({
       uri: v.uri,
       method: v.method,
-      async processor(request) {
+      processor: option => async (request) => {
         const payload = request.body;
-        if(!v.io.request.is(payload)) return { code: 400, data: '400 Bad Request The payload type is incorrect.' };
+        if(!v.io.request.is(payload)) return option.incorrectTypeMessage;
         return HttpAPIResponse.unpack(await v.processor(new HttpAPIRequest(request), payload));
       },
     }));
