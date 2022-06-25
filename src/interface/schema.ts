@@ -9,18 +9,18 @@ type FieldRuntypeBase = { [_: string]: RuntypeBase };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyAPISchemaIO = APISchemaIO<any, any>;
 
-export type UnWrappedAPISchemaIO = {
+type UnWrappedAPISchemaIO = {
   request: FieldRuntypeBase,
   response: FieldRuntypeBase,
 }
 
-export type APISchemaIO<T extends FieldRuntypeBase, U extends FieldRuntypeBase> = {
+type APISchemaIO<T extends FieldRuntypeBase, U extends FieldRuntypeBase> = {
   request: InternalRecord<T, false, false>,
   response: InternalRecord<U, false, false>
 };
 
-export type APISchemaIOWrapper<T extends UnWrappedAPISchemaIO> = { [P in keyof UnWrappedAPISchemaIO]: InternalRecord<T[P], false, false> };
-export type APISchemaWrapper<T extends APISchemaTemplate<UnWrappedAPISchemaIO>> = { [P in keyof T & APIEndPoint]: APISchemaIOWrapper<T[P]> };
+type APISchemaIOWrapper<T extends UnWrappedAPISchemaIO> = { [P in keyof UnWrappedAPISchemaIO]: InternalRecord<T[P], false, false> };
+type APISchemaWrapper<T extends APISchemaTemplate<UnWrappedAPISchemaIO>> = { [P in keyof T & APIEndPoint]: APISchemaIOWrapper<T[P]> };
 
 export type APIEndPoint =`${HttpRequestMethod} /${string}`;
 
@@ -29,7 +29,7 @@ export type APIEndPoint =`${HttpRequestMethod} /${string}`;
  */
 export type APISchema = APISchemaTemplate<AnyAPISchemaIO>;
 
-export type APISchemaTemplate<Schema extends AnyAPISchemaIO | UnWrappedAPISchemaIO> = {
+type APISchemaTemplate<Schema extends AnyAPISchemaIO | UnWrappedAPISchemaIO> = {
   [key: APIEndPoint]: Schema,
 };
 
