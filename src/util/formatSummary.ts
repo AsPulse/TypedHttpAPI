@@ -1,6 +1,6 @@
 import type { HttpRequestMethod } from '../interface/httpMethod';
 
-export interface TypedAPIExportSummary {
+interface TypedAPIExportSummary {
   apiCount: {
     method: HttpRequestMethod,
     count: number

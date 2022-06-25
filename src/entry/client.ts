@@ -33,10 +33,10 @@ type Judger<Payload> = (response: Response<Payload>) => boolean;
 class TypedHttpAPIRequest<RequestPayload extends Record<string, unknown>, ResponsePayload> {
   private xhr = new XMLHttpRequest();
   private _judge: Judger<ResponsePayload> = response => 200 <= response.code && response.code < 300 || response.code === 304;
-  private _timeout = 10000;
 
   constructor(method: HttpRequestMethod, uri: string, private data: RequestPayload) {
     this.xhr.open(method, uri);
+    this.xhr.timeout = 10000;
   }
 
   judge(judger: Judger<ResponsePayload>) {
@@ -45,12 +45,13 @@ class TypedHttpAPIRequest<RequestPayload extends Record<string, unknown>, Respon
   }
 
   timeout(timeout: number) {
-    this._timeout = timeout;
+    this.xhr.timeout = timeout;
     return this;
   }
   
-  async sendAndGet() {
+  async fetch() {
     return new Promise<Response<ResponsePayload>>((resolve, reject: (reason: FailedResponse<ResponsePayload>) => void) => {
+      const rejectWith = (reason: Exclude<FailedResponse<unknown>['reason'], 'judge'>) => reject({ reason });
       this.xhr.addEventListener('load', () => {
         try {
           const jsonPayload = JSON.parse(this.xhr.responseText) as unknown;
@@ -64,21 +65,14 @@ class TypedHttpAPIRequest<RequestPayload extends Record<string, unknown>, Respon
             return;
           }
           resolve(response);
-          return;
         } catch {
-          reject({ reason: 'json' });
-          return;
+          rejectWith('json');
         }
       });
-      this.xhr.addEventListener('timeout', () => {
-        reject({ reason: 'timeout' });
-      });
-      this.xhr.addEventListener('error', () => {
-        reject({ reason: 'error' });
-      });
+      this.xhr.addEventListener('timeout', () => rejectWith('timeout'));
+      this.xhr.addEventListener('error', () => rejectWith('error'));
 
       this.xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8' );
-      this.xhr.timeout = this._timeout;
       this.xhr.send(JSON.stringify(this.data));
     });
   }
