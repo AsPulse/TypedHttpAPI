@@ -27,5 +27,17 @@ This is TYPESCRIPT POWER.
 ## Do you need a tutorial?
 You can see the tutorial on the "Wiki" tab at the top of this page or by clicking on the [here](https://github.com/AsPulse/TypedHttpAPI/wiki/Tutorial).
 
+<br>
+
 ## Or would you like to see a documentation?
 Rest assured, you can find it on the appropriate page of the Wiki from [here](https://github.com/AsPulse/TypedHttpAPI/wiki/Documentation).
+
+<br>
+
+## Author
+[Follow @\_AsPulse\_](https://twitter.com/_AsPulse_?ref_src=twsrc%5Etfw)
+
+<br>
+
+## License
+TypedHttpAPI is licensed under MIT. Please see [LICENSE](./LICENSE) for more info.
