@@ -77,6 +77,7 @@ class TypedHttpAPIRequest<RequestPayload extends Record<string, unknown>, Respon
         reject({ reason: 'error' });
       });
 
+      this.xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8' );
       this.xhr.timeout = this._timeout;
       this.xhr.send(JSON.stringify(this.data));
     });
