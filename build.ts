@@ -19,12 +19,21 @@ const buildOptions = {
 (async () => {
 
   await rm('./lib', { recursive: true, force: true });
+  await rm('./server', { recursive: true, force: true });
+  await rm('./client', { recursive: true, force: true });
 
   await build({
     ...buildOptions,
-    entryPoints: ['./src/entry/server.ts', './src/entry/client.ts'],
+    entryPoints: ['./src/entry/server.ts'],
     format: 'cjs',
-    outdir: './lib',
+    outfile: './server/index.js',
+  });
+
+  await build({
+    ...buildOptions,
+    entryPoints: ['./src/entry/client.ts'],
+    format: 'cjs',
+    outfile: './client/index.js',
   });
 
 
@@ -46,7 +55,7 @@ const buildOptions = {
     },
   ]);
 
-  await writeFile(resolve('./lib/server.d.ts'), serverDts);
-  await writeFile(resolve('./lib/client.d.ts'), clientDts);
+  await writeFile(resolve('./server/index.d.ts'), serverDts);
+  await writeFile(resolve('./client/index.d.ts'), clientDts);
 
 })();

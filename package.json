@@ -1,10 +1,11 @@
 {
   "name": "typed-http-api",
   "version": "1.0.0-nightly.6",
-  "main": "./lib/server.js",
-  "types": "./lib/server.d.ts",
+  "main": "./server/index.js",
+  "types": "./server/index.d.ts",
   "files": [
-    "./lib"
+    "./server",
+    "./client"
   ],
   "description": "TypeScript type system compliant communication via HTTP.",
   "keywords": [
