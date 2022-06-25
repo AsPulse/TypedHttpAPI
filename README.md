@@ -13,3 +13,16 @@ Everyone has thought about it at one time or another... :
 
 
 Let's make it happen, **with TypedHttpAPI!**
+
+<br>
+
+## Overview
+![](https://user-images.githubusercontent.com/84216737/175768210-e444a823-ec20-4984-8a8b-23855d42fdef.gif)  
+
+As shown in the video above, it is possible to make the completion work to match the specified API schema.  
+This is TYPESCRIPT POWER.
+
+<br>
+
+## Do you need a tutorial?
+You can see the tutorial on the "Wiki" tab at the top of this page or by clicking on the [here](https://github.com/AsPulse/TypedHttpAPI/wiki/Tutorial).
