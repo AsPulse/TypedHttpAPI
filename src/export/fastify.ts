@@ -1,23 +1,34 @@
 import type { TypedAPIExports } from '.';
 
-import type { FastifyInstance, FastifyRequest } from 'fastify';
+import type { FastifyInstance, FastifyRequest, RouteHandlerMethod } from 'fastify';
 import type { HttpRequestMethod } from '../interface/httpMethod';
+import type { APIImplementOption } from '../interface/api';
 
 export class TypedAPIFastify {
   constructor(public exports: TypedAPIExports<FastifyRequest>){}
 
-  register(fastify: FastifyInstance) {
-    this.exports.apis.forEach(api => {
-      const route = ((v: HttpRequestMethod) => {
-        if(v === 'POST') return fastify.post;
-        if(v === 'PUT') return fastify.put;
-        if(v === 'DELETE') return fastify.delete;
-        if(v === 'PATCH') return fastify.patch;
-        return fastify.get;
-      })(api.method);
+  private static option: APIImplementOption = {
+    incorrectTypeMessage: {
+      code: 400, 
+      data: {
+        message: 'The payload type is different from schema.',
+        error: 'Bad Request',
+        statusCode: 400,
+      },
+    },
+  };
 
-      route(api.uri, async (request, reply) => {
-        const implement = await api.processor({
+  register(fastify: FastifyInstance) {
+    const route = ((v: HttpRequestMethod, path: string, handler: RouteHandlerMethod) => {
+      if(v === 'POST') return fastify.post(path, handler);
+      if(v === 'PUT') return fastify.put(path, handler);
+      if(v === 'DELETE') return fastify.delete(path, handler);
+      if(v === 'PATCH') return fastify.patch(path, handler);
+      return fastify.get(path, handler);
+    });
+    this.exports.apis.forEach(api => {
+      route(api.method, api.uri, async (request, reply) => {
+        const implement = await api.processor(TypedAPIFastify.option)({
           header: request.headers,
           remoteAddress: request.ip,
           body: request.body,

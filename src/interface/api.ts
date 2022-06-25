@@ -25,6 +25,9 @@ export type APIImplements<
 export type APIExport<Raw> = {
   uri: string,
   method: HttpRequestMethod,
-  processor: (request: HttpRequest<Raw>) => Promise<HttpResponse>
+  processor: (option: APIImplementOption) => (request: HttpRequest<Raw>) => Promise<HttpResponse>
 }
 
+export type APIImplementOption = {
+  incorrectTypeMessage: HttpResponse,
+};
