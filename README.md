@@ -5,6 +5,7 @@
 ![npm bundle size](https://img.shields.io/bundlephobia/min/typed-http-api?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/aspulse/TypedHTTPAPI?style=flat-square)  
 
+(日本語でおｋだって? [日本語版を見る / See the Japanese version](./README_JA.md))
 
 Everyone has thought about it at one time or another... :  
 **I want to use the API schema written in TypeScript, both on the server and on the client!**
