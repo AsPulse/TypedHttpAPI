@@ -1,6 +1,6 @@
 {
   "name": "typed-http-api",
-  "version": "1.0.0-nightly.4",
+  "version": "1.0.0-nightly.5",
   "main": "./lib/server/index.js",
   "types": "./lib/server/index.d.ts",
   "files": [
