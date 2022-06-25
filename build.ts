@@ -7,7 +7,6 @@ rm('./lib', { recursive: true });
 
 const buildOptions = {
   bundle: true,
-  entryPoints: ['./src/index.ts', './src/client.ts'],
   external: [
     ...Object.keys(dependencies ?? []),
     ...Object.keys(devDependencies ?? []),
@@ -19,7 +18,16 @@ const buildOptions = {
 
 build({
   ...buildOptions,
+  entryPoints: ['./src/index.ts'],
   format: 'cjs',
-  outdir: './lib',
+  outdir: './lib/server',
+  plugins: [dtsPlugin()]
+});
+
+build({
+  ...buildOptions,
+  entryPoints: ['./src/client.ts'],
+  format: 'cjs',
+  outdir: './lib/client',
   plugins: [dtsPlugin()]
 });
