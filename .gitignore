@@ -31,4 +31,5 @@ jspm_packages/
 .env.test
 
 # esbuild Output
-lib
+server
+client
