@@ -27,7 +27,7 @@ export class TypedAPIFastify {
       return fastify.get(path, handler);
     });
     this.exports.apis.forEach(api => {
-      route(api.method, api.uri, async (request, reply) => {
+      route(api.endpoint.method, api.endpoint.uri, async (request, reply) => {
         const implement = await api.processor(TypedAPIFastify.option)({
           header: request.headers,
           remoteAddress: request.ip,
