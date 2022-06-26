@@ -12,19 +12,22 @@ export type APIImplement<
   processor: (request: HttpAPIRequest<Raw, Static<APISchemaType[EndPoint]['response']>>, body: Static<APISchemaType[EndPoint]['request']>) => Promise<HttpAPIResponse<Static<APISchemaType[EndPoint]['response']>>>,
 };
 
+export type StructuredEndPoint = {
+  uri: string,
+  method: HttpRequestMethod,
+}
+
 export type APIImplements<
   APISchemaType extends APISchema,
   Raw,
 > = {
   io: AnyAPISchemaIO,
-  uri: string,
-  method: HttpRequestMethod,
+  endpoint: StructuredEndPoint,
   processor: APIImplement<APISchemaType, Raw, keyof APISchemaType & APIEndPoint>['processor'],
 };
 
 export type APIExport<Raw> = {
-  uri: string,
-  method: HttpRequestMethod,
+  endpoint: StructuredEndPoint,
   processor: (option: APIImplementOption) => (request: HttpRequest<Raw>) => Promise<HttpResponse>
 }
 

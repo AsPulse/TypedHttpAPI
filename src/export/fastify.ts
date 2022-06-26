@@ -18,6 +18,15 @@ export class TypedAPIFastify {
     },
   };
 
+  private static shortageMessage = {
+    code: 501,
+    data: {
+      message: 'It exists in the API schema but is not implemented.',
+      error: 'Not Implemented',
+      statusCode: 501,
+    },
+  };
+
   register(fastify: FastifyInstance) {
     const route = ((v: HttpRequestMethod, path: string, handler: RouteHandlerMethod) => {
       if(v === 'POST') return fastify.post(path, handler);
@@ -27,13 +36,20 @@ export class TypedAPIFastify {
       return fastify.get(path, handler);
     });
     this.exports.apis.forEach(api => {
-      route(api.method, api.uri, async (request, reply) => {
+      route(api.endpoint.method, api.endpoint.uri, async (request, reply) => {
         const implement = await api.processor(TypedAPIFastify.option)({
           header: request.headers,
           remoteAddress: request.ip,
           body: request.body,
           raw: request,
         });
+        reply.code(implement.code);
+        return implement.data;
+      });
+    });
+    this.exports.shortages.forEach(endpoint => {
+      route(endpoint.method, endpoint.uri, async (...[,reply]) => {
+        const implement = TypedAPIFastify.shortageMessage;
         reply.code(implement.code);
         return implement.data;
       });
