@@ -52,28 +52,30 @@ class TypedHttpAPIRequest<RequestPayload extends Record<string, unknown>, Respon
   async fetch() {
     return new Promise<Response<ResponsePayload>>((resolve, reject: (reason: FailedResponse<ResponsePayload>) => void) => {
       const rejectWith = (reason: Exclude<FailedResponse<unknown>['reason'], 'judge'>) => reject({ reason });
-      this.xhr.addEventListener('load', () => {
-        try {
-          const jsonPayload = JSON.parse(this.xhr.responseText) as unknown;
-          const response: Response<ResponsePayload> = {
-            code: this.xhr.status,
-            body: jsonPayload as ResponsePayload,
-          };
-          const judge = this._judge(response);
-          if(!judge) {
-            reject({ reason: 'judge', response });
-            return;
+      (xhr => {
+        xhr.addEventListener('load', () => {
+          try {
+            const jsonPayload = JSON.parse(xhr.responseText) as unknown;
+            const response: Response<ResponsePayload> = {
+              code: xhr.status,
+              body: jsonPayload as ResponsePayload,
+            };
+            const judge = this._judge(response);
+            if(!judge) {
+              reject({ reason: 'judge', response });
+              return;
+            }
+            resolve(response);
+          } catch {
+            rejectWith('json');
           }
-          resolve(response);
-        } catch {
-          rejectWith('json');
-        }
-      });
-      this.xhr.addEventListener('timeout', () => rejectWith('timeout'));
-      this.xhr.addEventListener('error', () => rejectWith('error'));
+        });
+        xhr.addEventListener('timeout', () => rejectWith('timeout'));
+        xhr.addEventListener('error', () => rejectWith('error'));
 
-      this.xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8' );
-      this.xhr.send(JSON.stringify(this.data));
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8' );
+        xhr.send(JSON.stringify(this.data));
+      })(this.xhr);
     });
   }
 }
