@@ -26,12 +26,18 @@ This is TYPESCRIPT POWER.
 <br>
 
 ## Do you need a tutorial?
-You can see the tutorial on the "Wiki" tab at the top of this page or by clicking on the [here](https://github.com/AsPulse/TypedHttpAPI/wiki/Tutorial).
+You can see the tutorial on the "Wiki" tab at the top of this page or by clicking on the [here](https://github.com/AsPulse/TypedHttpAPI/wiki/Tutorial).  
+
 
 <br>
 
 ## Or would you like to see a documentation?
-Rest assured, you can find it on the appropriate page of the Wiki from [here](https://github.com/AsPulse/TypedHttpAPI/wiki/Documentation).
+Rest assured, you can find it on the appropriate page of the Wiki from [here](https://github.com/AsPulse/TypedHttpAPI/wiki/Documentation).  
+
+<br>
+
+> **Note**  
+> Both Documentation and Tutorial are still being written.
 
 <br>
 
