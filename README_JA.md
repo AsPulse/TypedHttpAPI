@@ -36,6 +36,11 @@
 
 <br>
 
+> **Note**  
+> ドキュメントとチュートリアルは現在執筆中です...
+ 
+<br>
+
 ## さくしゃ
 [フォローしてね(小声) @\_AsPulse\_](https://twitter.com/_AsPulse_?ref_src=twsrc%5Etfw)
 
