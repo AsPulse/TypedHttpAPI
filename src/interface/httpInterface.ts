@@ -1,3 +1,4 @@
+import type { IHttpCookie } from './cookie';
 
 /** Request received by TypedHTTPAPI from the HTTP server. */
 export type HttpRequest<Raw> = {
@@ -22,7 +23,25 @@ export class HttpAPIRequest<Raw, ResponseType> {
     private received: HttpRequest<Raw>,
   ) {}
 
+  private parsedCookie: IHttpCookie[] | null = null;
+
   response = new HttpAPIResponse<ResponseType>;
+
+  cookie(name: string): IHttpCookie | undefined  {
+    if ( this.parsedCookie === null ) {
+      this.parsedCookie = this.received.header.cookie === undefined ? [] : 
+        this.received.header.cookie.split('; ')
+          .flatMap(v => {
+            const data = v.split('=');
+            if(data.length !== 2) return [];
+            return [{
+              name: data[0],
+              value: data[1],
+            }];
+          });
+    }
+    return this.parsedCookie.find(v => v.name === name);
+  }
 
   raw() { return this.received.raw; }
 
