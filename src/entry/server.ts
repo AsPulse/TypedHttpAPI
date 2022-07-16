@@ -3,7 +3,7 @@ import type { APIImplements, APIImplement, APIExport } from '../interface/api';
 import { HttpAPIRequest, HttpAPIResponse } from '../interface/httpInterface';
 import { HTTP_REQUEST_METHODS } from '../interface/httpMethod';
 import type { APISchema, APIEndPoint } from '../interface/schema';
-import type { BetterObjectConstructor } from '../util/betterObjectConstrutor';
+import type { BetterObjectConstructor } from 'better-object-constructor';
 import { detectDuplicate } from '../util/detectDuplicate';
 import { generateSummary } from '../util/formatSummary';
 import { parseEndPoint } from '../util/parseEndPoint';
