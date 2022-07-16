@@ -1,7 +1,7 @@
 import type { InternalRecord } from 'runtypes';
 import { Record } from 'runtypes';
 import type { RuntypeBase } from 'runtypes/lib/runtype';
-import type { BetterObjectConstructor } from '../util/betterObjectConstrutor';
+import type { BetterObjectConstructor } from 'better-object-constructor';
 import type { HttpRequestMethod } from './httpMethod';
 
 type FieldRuntypeBase = { [_: string]: RuntypeBase };
