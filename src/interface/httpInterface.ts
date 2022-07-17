@@ -79,6 +79,7 @@ export class HttpAPIResponse<OutputType> {
       cookie.secure === true ? 'Secure' : '',
       cookie.httpOnly === true ? 'HttpOnly' : '',
     ].join('; '));
+    return this;
   }
 
   code(code: number) {
