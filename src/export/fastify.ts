@@ -40,7 +40,7 @@ export class TypedAPIFastify {
         const implement = await api.processor(TypedAPIFastify.option)({
           header: request.headers,
           remoteAddress: request.ip,
-          body: request.body,
+          body: api.endpoint.method === 'GET' ? request.params : request.body,
           raw: request,
         });
         if(implement.cookie !== undefined) reply.header('Set-Cookie', implement.cookie);
