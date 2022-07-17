@@ -21,7 +21,7 @@ export function generateSummary(data: TypedAPIExportSummary) {
     '',
     `${bold}${magenta}=== TypedAPI Export Summary ===${reset}`,
     '',
-    '- API Schema Counts:',
+    '- Implemented API Counts:',
     ...keyValue(data.apiCount.flatMap(v => v.count > 0 ? [({ key: v.method, value: `${v.count} API(s)` })] : []), ['(No API implemented)']).map(v => `   ${v}`),
     '',
     ...(data.doublingEndpoints.length > 0 ? [
