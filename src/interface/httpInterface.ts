@@ -70,15 +70,15 @@ export class HttpAPIResponse<OutputType> {
 
   setCookie(cookie: IHttpSetCookie) {
     this._cookie.push([
-      `${cookie.name}=${cookie.value}`,
-      cookie.expires !== undefined ? `Expires=${cookie.expires.toUTCString()}` : '',
-      cookie.maxAge !== undefined ? `Max-Age=${cookie.maxAge}` : '',
-      cookie.domain !== undefined ? `Domain=${cookie.domain}` : '',
-      cookie.path !== undefined ? `Path=${cookie.path}` : '',
-      cookie.sameSite !== undefined ? `SameSite=${cookie.sameSite}` : '',
-      cookie.secure === true ? 'Secure' : '',
-      cookie.httpOnly === true ? 'HttpOnly' : '',
-    ].join('; '));
+      [`${cookie.name}=${cookie.value}`],
+      cookie.expires !== undefined ? [`Expires=${cookie.expires.toUTCString()}`] : [],
+      cookie.maxAge !== undefined ? [`Max-Age=${cookie.maxAge}`] : [],
+      cookie.domain !== undefined ? [`Domain=${cookie.domain}`] : [],
+      cookie.path !== undefined ? [`Path=${cookie.path}`] : [],
+      cookie.sameSite !== undefined ? [`SameSite=${cookie.sameSite}`] : [],
+      cookie.secure === true ? ['Secure'] : [],
+      cookie.httpOnly === true ? ['HttpOnly'] : [],
+    ].flat().join('; '));
     return this;
   }
 
