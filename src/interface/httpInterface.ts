@@ -14,7 +14,7 @@ export type HttpRequest<Raw> = {
 
 export type HttpResponse = {
   code: number,
-  cookie: string[],
+  cookie?: string[],
   data: unknown,
 };
 
