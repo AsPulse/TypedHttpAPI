@@ -43,6 +43,7 @@ export class TypedAPIFastify {
           body: request.body,
           raw: request,
         });
+        if(implement.cookie !== undefined) reply.header('Set-Cookie', implement.cookie);
         reply.code(implement.code);
         return implement.data;
       });
