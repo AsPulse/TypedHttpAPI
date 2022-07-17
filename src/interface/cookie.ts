@@ -39,7 +39,7 @@ export type IHttpSetCookie = {
 } & (
   {
     sameSite?: undefined,
-    secure: boolean,
+    secure?: boolean,
   } | {
     /**
      * If sameSite  is 'None', { secure: true } will be required.
@@ -51,4 +51,3 @@ export type IHttpSetCookie = {
     secure?: boolean
   }
 );
-
