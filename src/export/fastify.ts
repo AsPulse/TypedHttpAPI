@@ -35,19 +35,25 @@ export class TypedAPIFastify {
       if(v === 'PATCH') return fastify.patch(path, handler);
       return fastify.get(path, handler);
     });
-    this.exports.apis.forEach(api => {
-      route(api.endpoint.method, api.endpoint.uri, async (request, reply) => {
-        const implement = await api.processor(TypedAPIFastify.option)({
-          header: request.headers,
-          remoteAddress: request.ip,
-          body: api.endpoint.method === 'GET' ? request.params : request.body,
-          raw: request,
+    this.exports.apis
+      //Delete duplicates leaving only the first one
+      .filter((v, i, arr) => 
+        arr.map(e => `${e.endpoint.method} ${e.endpoint.uri}`)
+          .indexOf(`${v.endpoint.method} ${v.endpoint.uri}`) === i,
+      )
+      .forEach(api => {
+        route(api.endpoint.method, api.endpoint.uri, async (request, reply) => {
+          const implement = await api.processor(TypedAPIFastify.option)({
+            header: request.headers,
+            remoteAddress: request.ip,
+            body: api.endpoint.method === 'GET' ? request.params : request.body,
+            raw: request,
+          });
+          if(implement.cookie !== undefined) reply.header('Set-Cookie', implement.cookie);
+          reply.code(implement.code);
+          return implement.data;
         });
-        if(implement.cookie !== undefined) reply.header('Set-Cookie', implement.cookie);
-        reply.code(implement.code);
-        return implement.data;
       });
-    });
     this.exports.shortages.forEach(endpoint => {
       route(endpoint.method, endpoint.uri, async (...[,reply]) => {
         const implement = TypedAPIFastify.shortageMessage;
