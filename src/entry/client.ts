@@ -11,12 +11,12 @@ export class TypedHttpAPI<APISchemaType extends APISchema> {
     return this;
   }
 
-  open<T extends keyof APISchemaType & APIEndPoint>(endpoint: T, data: Static<APISchemaType[T]['request']>) {
+  open<T extends keyof APISchemaType & APIEndPoint>(endpoint: T, data: Static<APISchemaType[T]['request']>, withCredentials = false) {
     const target = parseEndPoint(endpoint);
     return new TypedHttpAPIRequest<
       Static<APISchemaType[T]['request']>,
       Static<APISchemaType[T]['response']>
-    >(target.method, this.uriPrefix + target.uri, data);
+    >(target.method, this.uriPrefix + target.uri, data, withCredentials);
   }
 }
 
@@ -34,9 +34,10 @@ class TypedHttpAPIRequest<RequestPayload extends Record<string, unknown>, Respon
   private xhr = new XMLHttpRequest();
   private _judge: Judger<ResponsePayload> = response => 200 <= response.code && response.code < 300 || response.code === 304;
 
-  constructor(method: HttpRequestMethod, uri: string, private data: RequestPayload) {
+  constructor(method: HttpRequestMethod, uri: string, private data: RequestPayload, private withCredentials: boolean) {
     this.xhr.open(method, uri);
     this.xhr.timeout = 10000;
+    this.xhr.withCredentials = this.withCredentials;
   }
 
   judge(judger: Judger<ResponsePayload>) {
