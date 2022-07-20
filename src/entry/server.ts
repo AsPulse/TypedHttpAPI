@@ -59,3 +59,4 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
 
 export { TypedAPIExports, TypedAPIFastify } from '../export/index';
 export { generateAPISchema } from '../interface/schema';
+export { TypedHttpAPIImplements } from '../interface/implements';
