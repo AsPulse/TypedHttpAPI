@@ -2,6 +2,7 @@ import type { InternalRecord } from 'runtypes';
 import type { RuntypeBase } from 'runtypes/lib/runtype';
 import type { BetterObjectConstructor } from 'better-object-constructor';
 import type { HttpRequestMethod } from './httpMethod';
+import type { Record } from 'runtypes';
 
 type FieldRuntypeBase = { [_: string]: RuntypeBase };
 
@@ -9,9 +10,9 @@ type FieldRuntypeBase = { [_: string]: RuntypeBase };
 export type AnyAPISchemaIO = APISchemaIO<any, any>;
 
 type UnWrappedAPISchemaIO = {
-  request: InternalRecord<FieldRuntypeBase, false, false>,
-  response: InternalRecord<FieldRuntypeBase, false, false>,
-}
+  request: Record<FieldRuntypeBase, false>,
+  response: Record<FieldRuntypeBase, false>
+};
 
 type APISchemaIO<T extends FieldRuntypeBase, U extends FieldRuntypeBase> = {
   request: InternalRecord<T, false, false>,
