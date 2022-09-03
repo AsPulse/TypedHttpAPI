@@ -1,5 +1,4 @@
 import type { InternalRecord } from 'runtypes';
-import { Record } from 'runtypes';
 import type { RuntypeBase } from 'runtypes/lib/runtype';
 import type { BetterObjectConstructor } from 'better-object-constructor';
 import type { HttpRequestMethod } from './httpMethod';
@@ -10,8 +9,8 @@ type FieldRuntypeBase = { [_: string]: RuntypeBase };
 export type AnyAPISchemaIO = APISchemaIO<any, any>;
 
 type UnWrappedAPISchemaIO = {
-  request: FieldRuntypeBase,
-  response: FieldRuntypeBase,
+  request: InternalRecord<FieldRuntypeBase, false, false>,
+  response: InternalRecord<FieldRuntypeBase, false, false>,
 }
 
 type APISchemaIO<T extends FieldRuntypeBase, U extends FieldRuntypeBase> = {
@@ -19,7 +18,7 @@ type APISchemaIO<T extends FieldRuntypeBase, U extends FieldRuntypeBase> = {
   response: InternalRecord<U, false, false>
 };
 
-type APISchemaIOWrapper<T extends UnWrappedAPISchemaIO> = { [P in keyof UnWrappedAPISchemaIO]: InternalRecord<T[P], false, false> };
+type APISchemaIOWrapper<T extends UnWrappedAPISchemaIO> = { [P in keyof UnWrappedAPISchemaIO]: T[P]};
 type APISchemaWrapper<T extends APISchemaTemplate<UnWrappedAPISchemaIO>> = { [P in keyof T & APIEndPoint]: APISchemaIOWrapper<T[P]> };
 
 export type APIEndPoint =`${HttpRequestMethod} /${string}`;
@@ -36,4 +35,4 @@ type APISchemaTemplate<Schema extends AnyAPISchemaIO | UnWrappedAPISchemaIO> = {
 declare const Object: BetterObjectConstructor;
 
 export const generateAPISchema = <T extends ReadonlyArray<APISchemaTemplate<UnWrappedAPISchemaIO>>>(...input: T): APISchemaWrapper<T[0]> => 
-  Object.fromEntries(Object.entries(input[0]).map(v => [v[0], { request: Record(v[1].request), response: Record(v[1].response) }]));
+  Object.fromEntries(Object.entries(input[0]).map(v => [v[0], { request: v[1].request, response: v[1].response }]));
