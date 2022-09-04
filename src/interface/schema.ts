@@ -1,5 +1,4 @@
 import type { RuntypeBase } from 'runtypes/lib/runtype';
-import { Types } from './generatedRuntypes';
 import type { HttpRequestMethod } from './httpMethod';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,6 +55,4 @@ const bundleAPISchema = <T extends readonly APISchema[]>(input:
 ): UnionToIntersection<T[number]> => 
   input.map(v => v.fields).reduce((a, b) => ({ ...a, ...b }), {}) as UnionToIntersection<T[number]>;
 
-
-export const apiSchema = generateAPISchema(Types);
 
