@@ -1,39 +1,26 @@
-import type { InternalRecord } from 'runtypes';
 import type { RuntypeBase } from 'runtypes/lib/runtype';
-import type { BetterObjectConstructor } from 'better-object-constructor';
 import type { HttpRequestMethod } from './httpMethod';
-import type { Record } from 'runtypes';
-
-type FieldRuntypeBase = { [_: string]: RuntypeBase };
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyAPISchemaIO = APISchemaIO<any, any>;
+export type AnyAPISchemaIO = FieldReference<APISchemaIO<any, any>>;
 
-type UnWrappedAPISchemaIO = {
-  request: Record<FieldRuntypeBase, false>,
-  response: Record<FieldRuntypeBase, false>
+interface FieldReference<T> {
+  fields: T,
+}
+
+type APISchemaIO<T, U> = {
+  request: RuntypeBase<T>,
+  response: RuntypeBase<U>
 };
-
-type APISchemaIO<T extends FieldRuntypeBase, U extends FieldRuntypeBase> = {
-  request: InternalRecord<T, false, false>,
-  response: InternalRecord<U, false, false>
-};
-
-type APISchemaIOWrapper<T extends UnWrappedAPISchemaIO> = { [P in keyof UnWrappedAPISchemaIO]: T[P]};
-type APISchemaWrapper<T extends APISchemaTemplate<UnWrappedAPISchemaIO>> = { [P in keyof T & APIEndPoint]: APISchemaIOWrapper<T[P]> };
 
 export type APIEndPoint =`${HttpRequestMethod} /${string}`;
 
 /**
  * For each API endpoint, specify the request method, request interface and response interfaces.
  */
-export type APISchema = APISchemaTemplate<AnyAPISchemaIO>;
+export type APISchema = FieldReference<APISchemaTemplate<AnyAPISchemaIO>>;
 
-type APISchemaTemplate<Schema extends AnyAPISchemaIO | UnWrappedAPISchemaIO> = {
-  [key: APIEndPoint]: Schema,
+type APISchemaTemplate<Schema> = {
+  [key: APIEndPoint]: Schema
 };
 
-declare const Object: BetterObjectConstructor;
-
-export const generateAPISchema = <T extends ReadonlyArray<APISchemaTemplate<UnWrappedAPISchemaIO>>>(...input: T): APISchemaWrapper<T[0]> => 
-  Object.fromEntries(Object.entries(input[0]).map(v => [v[0], { request: v[1].request, response: v[1].response }]));
+export const generateAPISchema = <T extends APISchema>(input: T) => input;

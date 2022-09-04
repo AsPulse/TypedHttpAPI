@@ -1,4 +1,4 @@
-import type { Static } from 'runtypes/lib/runtype';
+import type { GetStaticSchema } from '../interface/api';
 import type { HttpRequestMethod } from '../interface/httpMethod';
 import type { APIEndPoint, APISchema } from '../interface/schema';
 import { parseEndPoint } from '../util/parseEndPoint';
@@ -11,11 +11,11 @@ export class TypedHttpAPI<APISchemaType extends APISchema> {
     return this;
   }
 
-  open<T extends keyof APISchemaType & APIEndPoint>(endpoint: T, data: Static<APISchemaType[T]['request']>, withCredentials = false) {
+  open<T extends keyof APISchemaType & APIEndPoint>(endpoint: T, data: GetStaticSchema<APISchemaType, T, 'request'>, withCredentials = false) {
     const target = parseEndPoint(endpoint);
     return new TypedHttpAPIRequest<
-      Static<APISchemaType[T]['request']>,
-      Static<APISchemaType[T]['response']>
+      GetStaticSchema<APISchemaType, T, 'request'>,
+      GetStaticSchema<APISchemaType, T, 'response'>
     >(target.method, this.uriPrefix + target.uri, data, withCredentials);
   }
 }

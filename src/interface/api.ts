@@ -3,13 +3,28 @@ import type { HttpAPIRequest, HttpAPIResponse, HttpRequest, HttpResponse } from 
 import type { HttpRequestMethod } from './httpMethod';
 import type { APISchema, APIEndPoint, AnyAPISchemaIO } from './schema';
 
+export type GetSchema<
+  APISchemaType extends APISchema,
+  EndPoint extends (keyof APISchemaType['fields'] & APIEndPoint),
+  Type extends 'request' | 'response'
+> = APISchemaType['fields'][EndPoint]['fields'][Type];
+
+export type GetStaticSchema<
+  APISchemaType extends APISchema,
+  EndPoint extends (keyof APISchemaType['fields'] & APIEndPoint),
+  Type extends 'request' | 'response'
+> = Static<GetSchema<APISchemaType, EndPoint, Type>>;
+
 export type APIImplement<
   APISchemaType extends APISchema,
   Raw,
-  EndPoint extends (keyof APISchemaType & APIEndPoint) = keyof APISchemaType & APIEndPoint,
+  EndPoint extends (keyof APISchemaType['fields'] & APIEndPoint) = keyof APISchemaType['fields'] & APIEndPoint,
 > = {
   endpoint: EndPoint,
-  processor: (request: HttpAPIRequest<Raw, Static<APISchemaType[EndPoint]['response']>>, body: Static<APISchemaType[EndPoint]['request']>) => Promise<HttpAPIResponse<Static<APISchemaType[EndPoint]['response']>>>,
+  processor: (
+    request: HttpAPIRequest<Raw, GetStaticSchema<APISchemaType, EndPoint, 'response'>>,
+    body: GetStaticSchema<APISchemaType, EndPoint, 'request'>
+  ) => Promise<HttpAPIResponse<GetStaticSchema<APISchemaType, EndPoint, 'response'>>>,
 };
 
 export type StructuredEndPoint = {
