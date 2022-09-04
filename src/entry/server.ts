@@ -16,13 +16,13 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
   constructor(public schema: APISchemaType){}
 
   implement<
-    EndPoint extends (keyof APISchemaType['fields'] & APIEndPoint),
+    EndPoint extends (keyof APISchemaType & APIEndPoint),
   >(endpoint: EndPoint, processor: APIImplement<APISchemaType, Raw, EndPoint>['processor']): TypedHttpAPIServer<APISchemaType, Raw>
 
   implement(t: TypedHttpAPIImplements<APISchemaType>): TypedHttpAPIServer<APISchemaType, Raw>
 
   implement<
-    EndPoint extends (keyof APISchemaType['fields'] & APIEndPoint),
+    EndPoint extends (keyof APISchemaType & APIEndPoint),
   >(a: EndPoint | TypedHttpAPIImplements<APISchemaType, Raw>, b?: APIImplement<APISchemaType, Raw, EndPoint>['processor']) {
     if(a instanceof TypedHttpAPIImplements) {
       this.implementations = 
@@ -31,7 +31,7 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
       this.implementations.push({
         endpoint: parseEndPoint(a),
         processor: b,
-        io: this.schema['fields'][a],
+        io: this.schema[a],
       });
     }
     return this;
@@ -47,7 +47,7 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
         return HttpAPIResponse.unpack(await v.processor(new HttpAPIRequest(request), payload));
       },
     }));
-    const shortage = Object.entries(this.schema.fields).map(v => v[0]).filter(v => types.find(e => `${e.endpoint.method} ${e.endpoint.uri}` === v) === undefined);
+    const shortage = Object.entries(this.schema).map(v => v[0]).filter(v => types.find(e => `${e.endpoint.method} ${e.endpoint.uri}` === v) === undefined);
     if(summary) generateSummary({
       apiCount: HTTP_REQUEST_METHODS.map(v => ({ method: v, count: types.filter(e => e.endpoint.method === v).length })),
       doublingEndpoints: detectDuplicate(types.map(v => `${v.endpoint.method} ${v.endpoint.uri}`)),

@@ -7,12 +7,12 @@ export class TypedHttpAPIImplements<APISchemaType extends APISchema, Raw = undef
   constructor(public schema: APISchemaType){}
 
   implement<
-    EndPoint extends (keyof APISchemaType['fields'] & APIEndPoint),
+    EndPoint extends (keyof APISchemaType & APIEndPoint),
   >(endpoint: EndPoint, processor: APIImplement<APISchemaType, Raw, EndPoint>['processor']) {
     this.implementations.push({
       endpoint: parseEndPoint(endpoint),
       processor,
-      io: this.schema['fields'][endpoint],
+      io: this.schema[endpoint],
     });
     return this;
   }
