@@ -1,23 +1,16 @@
+import type { RuntypeBase } from 'runtypes/lib/runtype';
 import type { HttpRequestMethod } from './httpMethod';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyAPISchemaIO = FieldReference<APISchemaIO<any, any>>;
-
-interface Guardable<T> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  guard(x: any): x is T;
-}
 
 interface FieldReference<T> {
   fields: T,
 }
 
-
 type APISchemaIO<T, U> = {
-  request: Guardable<T>,
-  response: Guardable<U>
+  request: RuntypeBase<T>,
+  response: RuntypeBase<U>
 };
-
-
 
 export type APIEndPoint =`${HttpRequestMethod} /${string}`;
 

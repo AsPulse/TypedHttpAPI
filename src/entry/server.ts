@@ -16,13 +16,13 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
   constructor(public schema: APISchemaType){}
 
   implement<
-    EndPoint extends (keyof APISchemaType & APIEndPoint),
+    EndPoint extends (keyof APISchemaType['fields'] & APIEndPoint),
   >(endpoint: EndPoint, processor: APIImplement<APISchemaType, Raw, EndPoint>['processor']): TypedHttpAPIServer<APISchemaType, Raw>
 
   implement(t: TypedHttpAPIImplements<APISchemaType>): TypedHttpAPIServer<APISchemaType, Raw>
 
   implement<
-    EndPoint extends (keyof APISchemaType & APIEndPoint),
+    EndPoint extends (keyof APISchemaType['fields'] & APIEndPoint),
   >(a: EndPoint | TypedHttpAPIImplements<APISchemaType, Raw>, b?: APIImplement<APISchemaType, Raw, EndPoint>['processor']) {
     if(a instanceof TypedHttpAPIImplements) {
       this.implementations = 
