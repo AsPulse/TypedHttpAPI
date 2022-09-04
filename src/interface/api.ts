@@ -5,20 +5,20 @@ import type { APISchema, APIEndPoint, AnyAPISchemaIO } from './schema';
 
 export type GetSchema<
   APISchemaType extends APISchema,
-  EndPoint extends (keyof APISchemaType['fields'] & APIEndPoint),
+  EndPoint extends (keyof APISchemaType & APIEndPoint),
   Type extends 'request' | 'response'
-> = APISchemaType['fields'][EndPoint]['fields'][Type];
+> = APISchemaType[EndPoint]['fields'][Type];
 
 export type GetStaticSchema<
   APISchemaType extends APISchema,
-  EndPoint extends (keyof APISchemaType['fields'] & APIEndPoint),
+  EndPoint extends (keyof APISchemaType & APIEndPoint),
   Type extends 'request' | 'response'
 > = Static<GetSchema<APISchemaType, EndPoint, Type>>;
 
 export type APIImplement<
   APISchemaType extends APISchema,
   Raw,
-  EndPoint extends (keyof APISchemaType['fields'] & APIEndPoint) = keyof APISchemaType['fields'] & APIEndPoint,
+  EndPoint extends (keyof APISchemaType & APIEndPoint) = keyof APISchemaType & APIEndPoint,
 > = {
   endpoint: EndPoint,
   processor: (
