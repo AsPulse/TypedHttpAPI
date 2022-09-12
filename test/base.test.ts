@@ -30,6 +30,12 @@ export interface Marto {
   }
 }
 
+export interface RefTest {
+  a: {
+    b: { c: boolean };
+  }['b']['c'];
+}
+
 `;
 
 const parse = parseInterface(original);
@@ -73,5 +79,11 @@ test('parseCross3', () => {
 test('parseMarto', () => {
   expect(parseType(parse.find(v => v.name === 'Marto')?.value ?? '')).toBe(
     'rt.Record({a:rt.Record({b:rt.String})})',
+  );
+});
+
+test('parseRefTest', () => {
+  expect(parseType(parse.find(v => v.name === 'RefTest')?.value ?? '')).toBe(
+    'rt.Record({a:rt.Boolean})',
   );
 });

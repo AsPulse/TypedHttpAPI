@@ -22,6 +22,29 @@ export function parseType(type: string): string {
       .map(v => `${v.key}:${v.value}`);
     return `rt.Record({${typed}})`;
   }
+  
+  const refMatch = type.match(/^(.*?)\['(.*?)'\](.*)$/s);
+  if(refMatch !== null) {
+    const record = refMatch[1].match(/\{(.*)\}/s);
+    if(record === null) {
+      throw `Cannot reference ${refMatch[2]} because Record ${refMatch[1]} is Unknown`;
+    }
+    const data = splitOutBracket(record[1], /,|;|\n/)
+      .map(v => removeBothEndsSpace(v))
+      .filter(v => v !== '')
+      .map(v => splitOutBracket(v, ':'))
+      .map(v => v.map(e => removeBothEndsSpace(e)))
+      .map(v => ({
+        key: v[0],
+        value: v[1],
+      }))
+      .find(v => v.key === refMatch[2]);
+    if (data === undefined) {
+      throw `Record ${refMatch[1]} hasn't property ${refMatch[2]}`;
+    }
+    return parseType(`${data.value}${refMatch[3] ?? ''}`);
+  }
+
 
   const evalResult = leftEval(type);
   if(evalResult.evalable) return parseType(evalResult.result);
