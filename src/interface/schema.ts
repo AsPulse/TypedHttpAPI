@@ -1,24 +1,26 @@
+import type { InternalRecord } from 'runtypes';
 import type { RuntypeBase } from 'runtypes/lib/runtype';
+import type { BetterObjectConstructor } from 'better-object-constructor';
 import type { HttpRequestMethod } from './httpMethod';
+import type { Record } from 'runtypes';
+
+type FieldRuntypeBase = { [_: string]: RuntypeBase };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type AnyAPISchemaIO = FieldReference<APISchemaIO<any, any>>;
+export type AnyAPISchemaIO = APISchemaIO<any, any>;
 
-interface FieldReference<T> {
-  fields: T,
-}
-
-interface FieldReference<T> {
-  fields: T,
-}
-
-type FieldOut<T> = T extends { fields: unknown } ?  T['fields'] : never;
-
-
-type APISchemaIO<T, U> = {
-  request: RuntypeBase<T>,
-  response: RuntypeBase<U>
+type UnWrappedAPISchemaIO = {
+  request: Record<FieldRuntypeBase, false>,
+  response: Record<FieldRuntypeBase, false>
 };
+
+type APISchemaIO<T extends FieldRuntypeBase, U extends FieldRuntypeBase> = {
+  request: InternalRecord<T, false, false>,
+  response: InternalRecord<U, false, false>
+};
+
+type APISchemaIOWrapper<T extends UnWrappedAPISchemaIO> = { [P in keyof UnWrappedAPISchemaIO]: T[P]};
+type APISchemaWrapper<T extends APISchemaTemplate<UnWrappedAPISchemaIO>> = { [P in keyof T & APIEndPoint]: APISchemaIOWrapper<T[P]> };
 
 export type APIEndPoint =`${HttpRequestMethod} /${string}`;
 
@@ -27,32 +29,11 @@ export type APIEndPoint =`${HttpRequestMethod} /${string}`;
  */
 export type APISchema = APISchemaTemplate<AnyAPISchemaIO>;
 
-type APISchemaTemplate<Schema> = {
-  [key: APIEndPoint]: Schema
+type APISchemaTemplate<Schema extends AnyAPISchemaIO | UnWrappedAPISchemaIO> = {
+  [key: APIEndPoint]: Schema,
 };
 
+declare const Object: BetterObjectConstructor;
 
-type UnionToIntersection<U> =
-  (U extends unknown ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
-
-
-export const generateAPISchema = <U extends FieldReference<APISchema>, T extends readonly FieldReference<APISchema>[] = []>(input: U |  {
-  intersectees: [U, ...T]
-}): UnionToIntersection<{
-  [P in keyof [U, ...T] & number]: FieldOut<[U, ...T][P]>
-}[number]> => bundleAPISchema(arraylizeAPISchema(input));
-
-//HACK
-const arraylizeAPISchema = <U extends FieldReference<APISchema>, T extends readonly FieldReference<APISchema>[] = []>(input: U |  {
-  intersectees: [U, ...T]
-}): [U, ...T] => ('intersectees' in input ? input.intersectees : [input]) as [U, ...T];
-
-//HACK
-const bundleAPISchema = <T extends readonly APISchema[]>(input: 
-  {
-    [P in keyof T]: FieldReference<T[P]>
-  },
-): UnionToIntersection<T[number]> => 
-  input.map(v => v.fields).reduce((a, b) => ({ ...a, ...b }), {}) as UnionToIntersection<T[number]>;
-
-
+export const generateAPISchema = <T extends ReadonlyArray<APISchemaTemplate<UnWrappedAPISchemaIO>>>(...input: T): APISchemaWrapper<T[0]> => 
+  Object.fromEntries(Object.entries(input[0]).map(v => [v[0], { request: v[1].request, response: v[1].response }]));

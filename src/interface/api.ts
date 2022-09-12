@@ -7,7 +7,7 @@ export type GetSchema<
   APISchemaType extends APISchema,
   EndPoint extends (keyof APISchemaType & APIEndPoint),
   Type extends 'request' | 'response'
-> = APISchemaType[EndPoint]['fields'][Type];
+> = APISchemaType[EndPoint][Type];
 
 export type GetStaticSchema<
   APISchemaType extends APISchema,

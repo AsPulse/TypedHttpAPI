@@ -43,7 +43,7 @@ export class TypedHttpAPIServer<APISchemaType extends APISchema, Raw = undefined
       endpoint: v.endpoint,
       processor: option => async request => {
         const payload = request.body;
-        if(!v.io.fields.request.guard(payload)) return option.incorrectTypeMessage;
+        if(!v.io.request.guard(payload)) return option.incorrectTypeMessage;
         return HttpAPIResponse.unpack(await v.processor(new HttpAPIRequest(request), payload));
       },
     }));
