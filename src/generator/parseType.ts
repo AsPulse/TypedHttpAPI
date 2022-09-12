@@ -59,6 +59,8 @@ export function parseType(type: string): string {
   if(type === 'boolean') return 'rt.Boolean';
   if(type === 'null') return 'rt.Null';
   if(type === 'undefined') return 'rt.Undefined';
+  if(type === 'never') return 'rt.Never';
+  
   if(isStringLiteral(type)) {
     return `rt.Literal(${type})`;
   }
