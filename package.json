@@ -1,6 +1,6 @@
 {
   "name": "typed-http-api",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "main": "./server/index.js",
   "types": "./server/index.d.ts",
   "files": [
