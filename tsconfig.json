@@ -6,6 +6,6 @@
     "strict": true,
     "lib": ["ESNext", "dom"]
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "./test/**/*"],
   "exclude": ["node_modules"]
 }
