@@ -2,8 +2,12 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:base"
+    ":preserveSemverRanges"
   ],
   "ignorePresets": [":prHourlyLimit2"],
   "timezone": "Asia/Tokyo",
-  "branchConcurrentLimit": 0
+  "branchConcurrentLimit": 0,
+  "minor": {
+    "groupName": "all dependencies"
+  }
 }
