@@ -1,6 +1,6 @@
 import { removeBothEndsSpace } from './parseInterface';
 
-export function parseType(type: string): string {
+export async function parseType(type: string): Promise<string> {
   if(type !== removeBothEndsSpace(type)) return parseType(removeBothEndsSpace(type));
   
   if(type.startsWith('{') && type.endsWith('}')) {
@@ -19,8 +19,8 @@ export function parseType(type: string): string {
         key: v.key,
         value: parseType(v.value),
       }))
-      .map(v => `${v.key}:${v.value}`);
-    return `rt.Record({${typed}})`;
+      .map(async v => `${v.key}:${await v.value}`);
+    return `rt.Record({${(await Promise.all(typed)).join(',')}})`;
   }
   
   const refMatch = type.match(/^(.*?)\['(.*?)'\](.*)$/s);
@@ -46,13 +46,13 @@ export function parseType(type: string): string {
   }
 
   const recordMatch = type.match(/^Record<(.*),(.*)>$/s);
-  if(recordMatch !== null) return `rt.Record(${parseType(recordMatch[1])},${parseType(recordMatch[2])})`;
+  if(recordMatch !== null) return `rt.Record(${await parseType(recordMatch[1])},${await parseType(recordMatch[2])})`;
 
   const evalResult = leftEval(type);
   if(evalResult.evalable) return parseType(evalResult.result);
 
-  if(outBracketContains(type, '|')) return `rt.Union(${splitOutBracket(type, '|').map(v => parseType(v)).join(',')})`;
-  if(outBracketContains(type, '&')) return `rt.Intersect(${splitOutBracket(type, '&').map(v => parseType(v)).join(',')})`;
+  if(outBracketContains(type, '|')) return `rt.Union(${(await Promise.all(splitOutBracket(type, '|').map(v => parseType(v)))).join(',')})`;
+  if(outBracketContains(type, '&')) return `rt.Intersect(${(await Promise.all(splitOutBracket(type, '&').map(v => parseType(v)))).join(',')})`;
 
   if(type.startsWith('(') && type.endsWith(')')) return parseType(type.slice(1).slice(0, -1));
 
@@ -68,7 +68,7 @@ export function parseType(type: string): string {
   }
 
 
-  if(type.endsWith('[]')) return `rt.Array(${parseType(type.slice(0, -2))})`;  
+  if(type.endsWith('[]')) return `rt.Array(${await parseType(type.slice(0, -2))})`;  
 
   throw `Unknown Type: ${type}`;
 }
