@@ -45,6 +45,8 @@ export function parseType(type: string): string {
     return parseType(`${data.value}${refMatch[3] ?? ''}`);
   }
 
+  const recordMatch = type.match(/^Record<(.*),(.*)>$/s);
+  if(recordMatch !== null) return `rt.Record(${parseType(recordMatch[1])},${parseType(recordMatch[2])})`;
 
   const evalResult = leftEval(type);
   if(evalResult.evalable) return parseType(evalResult.result);
@@ -60,7 +62,7 @@ export function parseType(type: string): string {
   if(type === 'null') return 'rt.Null';
   if(type === 'undefined') return 'rt.Undefined';
   if(type === 'never') return 'rt.Never';
-  
+
   if(isStringLiteral(type)) {
     return `rt.Literal(${type})`;
   }

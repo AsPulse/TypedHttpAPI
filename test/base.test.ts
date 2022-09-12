@@ -36,6 +36,7 @@ export interface RefTest {
   }['b']['c'];
 }
 
+export type RecordTest = Record<string, never>;
 `;
 
 const parse = parseInterface(original);
@@ -85,5 +86,11 @@ test('parseMarto', () => {
 test('parseRefTest', () => {
   expect(parseType(parse.find(v => v.name === 'RefTest')?.value ?? '')).toBe(
     'rt.Record({a:rt.Boolean})',
+  );
+});
+
+test('parseRecordTest', () => {
+  expect(parseType(parse.find(v => v.name === 'RecordTest')?.value ?? '')).toBe(
+    'rt.Record(rt.String,rt.Never)',
   );
 });
