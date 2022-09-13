@@ -1,7 +1,8 @@
 import { removeBothEndsSpace } from './parseInterface';
+import type { FileProvider } from './resolveSymbol';
 
-export async function parseType(type: string): Promise<string> {
-  if(type !== removeBothEndsSpace(type)) return parseType(removeBothEndsSpace(type));
+export async function parseType(type: string, provider: FileProvider): Promise<string> {
+  if(type !== removeBothEndsSpace(type)) return parseType(removeBothEndsSpace(type), provider);
   
   if(type.startsWith('{') && type.endsWith('}')) {
     const content = type.slice(1).slice(0, -1);
@@ -17,7 +18,7 @@ export async function parseType(type: string): Promise<string> {
       
       .map(v => ({
         key: v.key,
-        value: parseType(v.value),
+        value: parseType(v.value, provider),
       }))
       .map(async v => `${v.key}:${await v.value}`);
     return `rt.Record({${(await Promise.all(typed)).join(',')}})`;
@@ -42,19 +43,19 @@ export async function parseType(type: string): Promise<string> {
     if (data === undefined) {
       throw `Record ${refMatch[1]} hasn't property ${refMatch[2]}`;
     }
-    return parseType(`${data.value}${refMatch[3] ?? ''}`);
+    return parseType(`${data.value}${refMatch[3] ?? ''}`, provider);
   }
 
   const recordMatch = type.match(/^Record<(.*),(.*)>$/s);
-  if(recordMatch !== null) return `rt.Record(${await parseType(recordMatch[1])},${await parseType(recordMatch[2])})`;
+  if(recordMatch !== null) return `rt.Record(${await parseType(recordMatch[1], provider)},${await parseType(recordMatch[2], provider)})`;
 
   const evalResult = leftEval(type);
-  if(evalResult.evalable) return parseType(evalResult.result);
+  if(evalResult.evalable) return parseType(evalResult.result, provider);
 
-  if(outBracketContains(type, '|')) return `rt.Union(${(await Promise.all(splitOutBracket(type, '|').map(v => parseType(v)))).join(',')})`;
-  if(outBracketContains(type, '&')) return `rt.Intersect(${(await Promise.all(splitOutBracket(type, '&').map(v => parseType(v)))).join(',')})`;
+  if(outBracketContains(type, '|')) return `rt.Union(${(await Promise.all(splitOutBracket(type, '|').map(v => parseType(v, provider)))).join(',')})`;
+  if(outBracketContains(type, '&')) return `rt.Intersect(${(await Promise.all(splitOutBracket(type, '&').map(v => parseType(v, provider)))).join(',')})`;
 
-  if(type.startsWith('(') && type.endsWith(')')) return parseType(type.slice(1).slice(0, -1));
+  if(type.startsWith('(') && type.endsWith(')')) return parseType(type.slice(1).slice(0, -1), provider);
 
   if(type === 'string') return 'rt.String';
   if(type === 'number') return 'rt.Number';
@@ -68,7 +69,7 @@ export async function parseType(type: string): Promise<string> {
   }
 
 
-  if(type.endsWith('[]')) return `rt.Array(${await parseType(type.slice(0, -2))})`;  
+  if(type.endsWith('[]')) return `rt.Array(${await parseType(type.slice(0, -2), provider)})`;  
 
   throw `Unknown Type: ${type}`;
 }
