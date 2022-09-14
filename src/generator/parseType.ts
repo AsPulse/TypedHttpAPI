@@ -1,5 +1,6 @@
 import { removeBothEndsSpace } from './parseInterface';
-import type { FileProvider } from './resolveSymbol';
+import type { FileProvider} from './resolveSymbol';
+import { resolveSymbol } from './resolveSymbol';
 
 export async function parseType(type: string, provider: FileProvider): Promise<string> {
   if(type !== removeBothEndsSpace(type)) return parseType(removeBothEndsSpace(type), provider);
@@ -26,11 +27,11 @@ export async function parseType(type: string, provider: FileProvider): Promise<s
   
   const refMatch = type.match(/^(.*?)\['(.*?)'\](.*)$/s);
   if(refMatch !== null) {
-    const record = refMatch[1].match(/\{(.*)\}/s);
-    if(record === null) {
+    const record = refMatch[1].match(/\{(.*)\}/s)?.[1] ?? (await resolveSymbol(refMatch[1], provider))?.match(/\{(.*)\}/s)?.[1];
+    if(record === null || record === undefined) {
       throw `Cannot reference ${refMatch[2]} because Record ${refMatch[1]} is Unknown`;
     }
-    const data = splitOutBracket(record[1], /,|;|\n/)
+    const data = splitOutBracket(record, /,|;|\n/)
       .map(v => removeBothEndsSpace(v))
       .filter(v => v !== '')
       .map(v => splitOutBracket(v, ':'))
@@ -41,7 +42,7 @@ export async function parseType(type: string, provider: FileProvider): Promise<s
       }))
       .find(v => v.key === refMatch[2]);
     if (data === undefined) {
-      throw `Record ${refMatch[1]} hasn't property ${refMatch[2]}`;
+      throw `Record ${refMatch[1]} = ${record} hasn't property ${refMatch[2]}`;
     }
     return parseType(`${data.value}${refMatch[3] ?? ''}`, provider);
   }

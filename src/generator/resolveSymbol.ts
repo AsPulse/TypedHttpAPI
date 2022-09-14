@@ -7,5 +7,5 @@ export async function resolveSymbol(name: string, provider: FileProvider) {
   const inFileDatas = parseInterface(data);
   const inFileSymbol = inFileDatas.find(v => v.name === name);
   if(inFileSymbol !== undefined) return inFileSymbol.value;
-  throw `Symbol ${name} couldn't resolve!`;
+  return null;
 }
