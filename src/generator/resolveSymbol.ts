@@ -4,11 +4,22 @@ import { isStringLiteral } from './parseType';
 export type FileProvider = (filePath: string) => Promise<string | undefined>;
 
 export async function resolveSymbol(name: string, provider: FileProvider) {
-  const data = await provider('./');
+  const data = await provider('');
   if(data === undefined) return null;
   const inFileDatas = parseInterface(data);
   const inFileSymbol = inFileDatas.find(v => v.name === name);
   if(inFileSymbol !== undefined) return inFileSymbol.value;
+
+  const imports = parseImport(data);
+  const target = imports.find(v => v.types.includes(name));
+  if(target === undefined) return null;
+  const files = await Promise.all(resolveFileName(target.path).map(v => provider(v)));
+  const external = files.find(v => v !== undefined);
+  if(external === undefined) return null;
+  const externalDatas = parseInterface(external);
+  const externalSymbol = externalDatas.find(v => v.name === name);
+  if(externalSymbol !== undefined) return externalSymbol.value;
+
   return null;
 }
 

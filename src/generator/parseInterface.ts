@@ -39,6 +39,7 @@ export function parseInterface(s: string): { name: string, value: string }[] {
           brackets: 0,
         };
       }
+      if(s[i] === ';') status = { at: 'none' };
       break;
     }
     case 'declaringInterface': {
@@ -52,6 +53,7 @@ export function parseInterface(s: string): { name: string, value: string }[] {
           brackets: 1,
         };
       }
+      if(s[i] === ';') status = { at: 'none' };
       break;
     }
     case 'inner': {
