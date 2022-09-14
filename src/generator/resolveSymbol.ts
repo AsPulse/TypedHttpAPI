@@ -21,3 +21,11 @@ export function parseImport(data: string): { path: string, types: string[] }[] {
     .map(v => ({ path: v[1].slice(1).slice(0, -1), types: v[0].split(',').map(e => removeBothEndsSpace(e)) }));
 }
 
+export function resolveFileName(name: string): string[] {
+  const v = name.endsWith('/') ? name.slice(0, -1) : name;
+  return v.endsWith('ts') ? [v] : [
+    v,
+    `${v}.ts`,
+    `${v}/index.ts`,
+  ];
+}
